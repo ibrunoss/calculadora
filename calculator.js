@@ -1,16 +1,31 @@
 class Calculator {
   currentOperand = "";
   previousOperand = "";
+  logs = [];
   operation = undefined;
 
   clear() {
     this.currentOperand = "";
     this.previousOperand = "";
-    this.operation = undefined;
+    this.logs = [];
+    this.operation = null;
   }
-
   delete() {
-    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+    if (this.currentOperand) {
+      this.currentOperand = this.currentOperand.toString().slice(0, -1);
+      return;
+    }
+
+    if (this.operation && this.logs.length > 0) {
+      this.previousOperand = this.logs.shift();
+      this.operation = this.logs.shift();
+      this.currentOperand = this.logs.shift();
+      return;
+    }
+
+    this.operation = null;
+    this.currentOperand = this.previousOperand;
+    this.previousOperand = "";
   }
 
   appendNumber(number) {
@@ -27,6 +42,8 @@ class Calculator {
     }
 
     if (this.previousOperand !== "") {
+      this.logs.push(this.previousOperand);
+      this.logs.push(this.operation);
       this.calc();
     }
 
@@ -36,11 +53,10 @@ class Calculator {
   }
 
   calc() {
-    let computation;
+    let computation = undefined;
     const prev = +this.previousOperand;
     const current = +this.currentOperand;
-    const operation =
-      isNaN(prev) || isNaN(current) ? undefined : this.operation;
+    const operation = isNaN(prev) || isNaN(current) ? null : this.operation;
 
     switch (operation) {
       case "+":
@@ -58,8 +74,9 @@ class Calculator {
       default:
         return;
     }
+    this.logs.push(current);
     this.currentOperand = computation;
-    this.operation = undefined;
+    this.operation = null;
     this.previousOperand = "";
   }
 
