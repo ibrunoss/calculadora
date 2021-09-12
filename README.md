@@ -1,5 +1,7 @@
 # <div align="center">Vanilla JavaScript Calculator</div>
 
+<img src="./screenshot.png" />
+
 <p align="center">Pure vanilla JavaScript calculator</p>
 
 ## 🛠️ Technologies
