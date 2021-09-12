@@ -25,7 +25,8 @@ body {
   justify-content: center;
   flex-direction: column;
   background-color: #fff;
-  max-width: 400px;
+  max-width: 330px;
+  min-width: 330px;
   padding: 16px;
   border-radius: 4px;
   font-family: sans-serif;
@@ -33,11 +34,21 @@ body {
 }
 
 .display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
+  height: 140px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 2em;
+  overflow: scrollZ;
+}
+.display .previous-operand {
+  font-size: 0.8em;
+}
+.display .current-operand {
+  font-size: 1.8em;
 }
 
 .keyboard {
