@@ -1,0 +1,20 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: rgba(0, 0, 0, 0)
+    linear-gradient(to right, rgb(142, 45, 226), rgb(74, 0, 224)) repeat scroll
+    0% 0%;
+}
