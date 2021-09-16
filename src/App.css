@@ -1,0 +1,13 @@
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff;
+  max-width: 330px;
+  min-width: 330px;
+  padding: 16px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  font-size: 2rem;
+}
