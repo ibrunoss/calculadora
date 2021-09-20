@@ -1,14 +1,16 @@
+import Calculator from "../../../model/calculator";
 import "./Button.css";
 
 interface ButtonsProps {
   value: string;
   twoColumns?: boolean;
   contrast?: boolean;
-  onClick?: (value: string) => void;
+  onClick: (value: string) => Calculator;
+  onChange: (calculator: Calculator) => void;
 }
 
 const Button: React.FC<ButtonsProps> = (props) => {
-  const { twoColumns, contrast, value, onClick } = props;
+  const { twoColumns, contrast, value, onClick, onChange } = props;
   const className: string[] = ["Button"];
 
   const handlerOnClick: () => (() => void) | undefined = () => {
@@ -16,7 +18,10 @@ const Button: React.FC<ButtonsProps> = (props) => {
       return undefined;
     }
 
-    return () => onClick(value);
+    return () => {
+      const newCalculator = onClick(value);
+      onChange(newCalculator);
+    };
   };
 
   if (twoColumns) {
