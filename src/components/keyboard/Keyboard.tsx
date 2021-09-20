@@ -1,26 +1,74 @@
+import Calculator from "../../model/calculator";
+import Button from "./button/Button";
 import "./Keyboard.css";
 
-const Keyboard: React.FC = () => {
+interface KeyboardProps {
+  onChange: (calculator: Calculator) => void;
+  calculator: Calculator;
+  calculate: () => Calculator;
+  del: () => Calculator;
+  onChangeDelete: (calculator: Calculator) => void;
+}
+
+const Keyboard: React.FC<KeyboardProps> = (props) => {
+  const { onChange, calculator, calculate, del, onChangeDelete } = props;
   return (
     <div className="Keyboard">
-      <button className="two-columns contrast">AC</button>
-      <button className="contrast">DEL</button>
-      <button className="contrast">÷</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button className="contrast">*</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button className="contrast">-</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button className="contrast">+</button>
-      <button>0</button>
-      <button className="contrast">.</button>
-      <button className="two-columns contrast">=</button>
+      <Button
+        twoColumns
+        contrast
+        value="AC"
+        onClick={calculator.clear}
+        onChange={onChange}
+      />
+      <Button contrast value="DEL" onClick={del} onChange={onChangeDelete} />
+      <Button
+        contrast
+        value="÷"
+        onClick={calculator.chooseOperation}
+        onChange={onChange}
+      />
+      <Button value="7" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="8" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="9" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button
+        contrast
+        value="*"
+        onClick={calculator.chooseOperation}
+        onChange={onChange}
+      />
+      <Button value="4" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="5" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="6" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button
+        contrast
+        value="-"
+        onClick={calculator.chooseOperation}
+        onChange={onChange}
+      />
+      <Button value="1" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="2" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button value="3" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button
+        contrast
+        value="+"
+        onClick={calculator.chooseOperation}
+        onChange={onChange}
+      />
+      <Button value="0" onClick={calculator.appendNumber} onChange={onChange} />
+      <Button
+        contrast
+        value="."
+        onClick={calculator.appendNumber}
+        onChange={onChange}
+      />
+      <Button
+        twoColumns
+        contrast
+        value="="
+        onClick={calculate}
+        onChange={onChange}
+      />
     </div>
   );
 };
