@@ -1,77 +1,95 @@
 export default class Calculator {
-  display: string = "0";
-
   constructor(
     private locale: string = "en",
+    public display: string = "0",
     private currentOperand: string = "",
     private previousOperand: string = "",
-    private logs: string[] = [],
     private operation: undefined | string = undefined
   ) {}
 
-  clear() {
-    this.currentOperand = "";
-    this.previousOperand = "";
-    this.logs = [];
-    this.operation = undefined;
-  }
+  clear = (): Calculator => {
+    const display = "0";
+    const currentOperand = "";
+    const previousOperand = "";
+    const operation = undefined;
 
-  delete() {
-    if (this.currentOperand) {
-      this.currentOperand = this.currentOperand.toString().slice(0, -1);
-      return;
-    }
+    return this.makeNewInstance(
+      display,
+      currentOperand,
+      previousOperand,
+      operation
+    );
+  };
 
-    if (this.operation && this.logs.length > 0) {
-      this.previousOperand = this.logs.shift() || "";
-      this.operation = this.logs.shift();
-      this.currentOperand = this.logs.shift() || "";
-      return;
-    }
-
-    this.operation = undefined;
-    this.currentOperand = this.previousOperand;
-    this.previousOperand = "";
-  }
-
-  appendNumber(number: string) {
+  appendNumber = (number: string): Calculator => {
     if (number === "." && this.currentOperand.includes(".")) {
-      return;
+      return this.makeNewInstance(
+        this.display,
+        this.currentOperand,
+        this.previousOperand,
+        this.operation
+      );
     }
     const toFixed = number === ".";
 
-    this.currentOperand = `${this.currentOperand}${number}`;
-    this.display = this.getDisplayNumber(this.currentOperand, toFixed);
-  }
+    const currentOperand = `${this.currentOperand}${number}`;
 
-  chooseOperation(operation: string) {
+    const display = this.updateDisplay(
+      this.previousOperand,
+      currentOperand,
+      this.operation,
+      toFixed
+    );
+
+    return this.makeNewInstance(
+      display,
+      currentOperand,
+      this.previousOperand,
+      this.operation
+    );
+  };
+
+  chooseOperation = (operation: string): Calculator => {
     if (this.currentOperand === "") {
-      return;
+      return this.makeNewInstance(
+        this.display,
+        this.currentOperand,
+        this.previousOperand,
+        this.operation
+      );
     }
 
-    if (this.previousOperand !== "") {
-      this.logs.push(this.previousOperand);
-      this.operation && this.logs.push(this.operation);
-      this.calc();
-    }
+    const previousOperand =
+      this.previousOperand !== "" ? this.calc() : this.currentOperand;
 
-    this.operation = operation;
-    this.previousOperand = this.currentOperand;
-    this.currentOperand = "";
-  }
+    const currentOperand = "";
 
-  calc() {
+    const display = this.updateDisplay(
+      previousOperand,
+      currentOperand,
+      operation
+    );
+
+    return this.makeNewInstance(
+      display,
+      currentOperand,
+      previousOperand,
+      operation
+    );
+  };
+
+  calc = (): string => {
     let computation: number;
+    let previousOperand = this.previousOperand;
+    let currentOperand = this.currentOperand;
 
-    const prev: number = +this.previousOperand;
-    const current: number = +this.currentOperand;
-    const operation: string | undefined =
+    const prev: number = +previousOperand;
+    const current: number = +currentOperand;
+
+    let operation: string | undefined =
       isNaN(prev) || isNaN(current) ? undefined : this.operation;
 
     switch (operation) {
-      case "+":
-        computation = prev + current;
-        break;
       case "-":
         computation = prev - current;
         break;
@@ -81,16 +99,34 @@ export default class Calculator {
       case "÷":
         computation = prev / current;
         break;
+      case "+":
       default:
-        return;
+        computation = prev + current;
     }
-    this.logs.push(this.currentOperand);
-    this.currentOperand = this.getDisplayNumber(computation);
-    this.operation = undefined;
-    this.previousOperand = "";
-  }
 
-  getDisplayNumber(number: string | number, toFixed = false): string {
+    return computation.toString();
+  };
+
+  updateDisplay = (
+    previousOperand: string,
+    currentOperand: string,
+    operation: string = "",
+    toFixed = false
+  ) => {
+    const previous = this.getDisplayNumber(previousOperand);
+    const current = this.getDisplayNumber(currentOperand, toFixed);
+
+    if (operation) {
+      return `${previous} ${operation} ${current}`;
+    }
+
+    return current;
+  };
+
+  private getDisplayNumber = (
+    number: string | number,
+    toFixed = false
+  ): string => {
     const numberIsString = typeof number === "string";
     let parseNumber: number;
 
@@ -100,12 +136,27 @@ export default class Calculator {
       parseNumber = number;
     }
 
-    const maximumFractionDigits = toFixed ? 1 : 0;
+    const minimumFractionDigits = toFixed ? 1 : 0;
 
     const options = {
-      maximumFractionDigits,
+      minimumFractionDigits,
     };
 
     return parseNumber.toLocaleString(this.locale, options);
-  }
+  };
+
+  makeNewInstance = (
+    display: string,
+    currentOperand: string,
+    previousOperand: string,
+    operation: undefined | string
+  ): Calculator => {
+    return new Calculator(
+      this.locale,
+      display,
+      currentOperand,
+      previousOperand,
+      operation
+    );
+  };
 }
