@@ -1,12 +1,13 @@
+import Calculator from "../../model/calculator";
 import "./Display.css";
 
-const Display: React.FC = () => {
-  return (
-    <div className="Display">
-      <div className="previous-operand"></div>
-      <div className="current-operand">0</div>
-    </div>
-  );
+interface DisplayProps {
+  calculator: Calculator;
+}
+
+const Display: React.FC<DisplayProps> = (props) => {
+  const { calculator } = props;
+  return <input type="text" className="Display" value={calculator.display} />;
 };
 
 export default Display;
