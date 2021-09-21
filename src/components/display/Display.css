@@ -8,10 +8,5 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   overflow: scrollZ;
-}
-.Display .previous-operand {
-  font-size: 0.8em;
-}
-.Display .current-operand {
-  font-size: 1.8em;
+  font-size: 1.2em;
 }
