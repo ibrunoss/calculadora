@@ -5,8 +5,8 @@
 ## 🛠️ Projects
 
 <ul>
-  <li><a href="./vanilla-js/README.md">Vanilla JS</a></li>
-  <li><a href="./react/README.md">React JS</a></li>
+  <li><a href="./vanilla-js">Vanilla JS</a></li>
+  <li><a href="./react">React JS</a></li>
 </ul>
 
 ### Autor
