@@ -4,7 +4,7 @@ import { DisplayProps } from "./Display.types";
 import "./Display.styles.css";
 
 const Display: React.FC<DisplayProps> = (props) => {
-    const { value, onInput } = props;
+    const { value, onInput, state } = props;
     const inputRef = useRef<HTMLInputElement>(null);
 
     const setValueToRef = useCallback(() => {
@@ -31,20 +31,20 @@ const Display: React.FC<DisplayProps> = (props) => {
     };
 
     const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        console.log(e.key);
-
         onInput?.(e.key);
     };
     return (
-        <input
-            ref={inputRef}
-            type="text"
-            className="display"
-            onClick={focusEnd}
-            onKeyDown={onKeyDown}
-            onInput={setValueToRef}
-            autoFocus
-        />
+        <div className="display">
+            {state}
+            <input
+                ref={inputRef}
+                type="text"
+                onClick={focusEnd}
+                onKeyDown={onKeyDown}
+                onInput={setValueToRef}
+                autoFocus
+            />
+        </div>
     );
 };
 
