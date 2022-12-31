@@ -1,4 +1,4 @@
-.Display {
+.display {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,5 +8,11 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   overflow: scrollZ;
-  font-size: 1.2em;
+  font-size: 0.8em;
+}
+
+.display input {
+  border: none;
+  outline: none;
+  font-size: 1.8em;
 }

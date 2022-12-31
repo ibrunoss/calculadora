@@ -1,80 +1,42 @@
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import Display from "./components/display/Display.component";
+import Keyboard from "./components/keyboard/Keyboard.component";
+import { CalculatorEntity, DisplayEntity, OperationEntity } from "./entity";
 import "./App.css";
-import Display from "./components/display/Display";
-import Keyboard from "./components/keyboard/Keyboard";
-import Calculator from "./model/calculator";
 
 const App: React.FC = () => {
-  const [calculator, setCalculator] = useState<Calculator>(new Calculator());
-  const [toTrash, setToTrash] = useState<boolean>(false);
-  const [history, setHistory] = useState<Calculator[]>([]);
+    const display = useMemo(() => new DisplayEntity(), []);
+    const operation = useMemo(() => new OperationEntity(), []);
+    const calculator = useMemo(
+        () => new CalculatorEntity(operation, display),
+        [display, operation]
+    );
+    const [displayValue, setDisplayValue] = useState<string>(display.value);
+    const [displayState, setDisplayState] = useState<string>();
 
-  const calculate = () => {
-    const previousOperand = "";
-    const currentOperand = calculator.calc();
-    const operation = undefined;
-    const display = calculator.updateDisplay(previousOperand, currentOperand);
-    const newCalculator = calculator.makeNewInstance(
-      display,
-      currentOperand,
-      previousOperand,
-      operation
+    const handleInput = useCallback(
+        (value: string) => {
+            calculator.handleInput(value);
+            setDisplayValue(display.value);
+
+            if (displayState !== calculator.expression) {
+                setDisplayState(calculator.expression);
+            }
+        },
+        [calculator, display.value, displayState]
     );
 
-    return newCalculator;
-  };
-
-  useEffect(() => {
-    const _history = [...history];
-
-    toTrash ? _history.pop() : _history.push(calculator);
-
-    setHistory(_history);
-  }, [calculator]);
-
-  const del = (history: Calculator[]): Calculator | undefined => {
-    let lastInHistory = history.pop();
-
-    if (lastInHistory?.display === calculator.display) {
-      lastInHistory = history.pop();
-    }
-
-    return lastInHistory;
-  };
-
-  const deleteCalculator: () => Calculator = () => {
-    const _history = [...history];
-    let lastInHistory = _history.pop();
-
-    while (lastInHistory?.display === calculator.display) {
-      lastInHistory = _history.pop();
-    }
-    return lastInHistory || new Calculator();
-  };
-
-  const onChangeDelete = (oldCalculator: Calculator) => {
-    setToTrash(true);
-    setCalculator(oldCalculator);
-  };
-
-  const onChange = (newCalculator: Calculator) => {
-    setToTrash(false);
-    setCalculator(newCalculator);
-  };
-
-  return (
-    <div className="App">
-      <Display calculator={calculator} />
-      <Keyboard
-        del={deleteCalculator}
-        onChangeDelete={onChangeDelete}
-        onChange={onChange}
-        calculator={calculator}
-        calculate={calculate}
-      />
-    </div>
-  );
+    return (
+        <div className="App">
+            <Display
+                value={displayValue}
+                state={displayState}
+                onInput={handleInput}
+            />
+            <Keyboard onClick={handleInput} />
+        </div>
+    );
 };
 
 export default App;
