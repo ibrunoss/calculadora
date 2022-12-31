@@ -1,46 +1,35 @@
-const calculator = new Calculator();
+const display = new Display();
+const operation = new Operation();
+const calculator = new Calculator(operation, display);
 
-calculator.updatePageDisplay = function () {
-  const previousOperandTextElement = document.querySelector(
-    "[data-previous-operand]"
-  );
-  const currentOperandTextElement = document.querySelector(
-    "[data-current-operand]"
-  );
-  this.updateDisplay(previousOperandTextElement, currentOperandTextElement);
+const updatePageDisplay = function () {
+    const previousOperandTextElement = document.querySelector(
+        "[data-previous-operand]"
+    );
+    const currentOperandTextElement = document.querySelector(
+        "[data-current-operand]"
+    );
+    previousOperandTextElement.innerHTML = calculator.expression;
+    currentOperandTextElement.innerHTML = calculator.display.value;
 };
 
-const numberButtons = document.querySelectorAll("[data-number]");
-const operationButtons = document.querySelectorAll("[data-operation]");
-const equalsButton = document.querySelector("[data-equals]");
+const buttons = document.querySelectorAll("[data-input]");
 const deleteButton = document.querySelector("[data-delete]");
 const allClearButton = document.querySelector("[data-all-clear]");
 
-numberButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    calculator.appendNumber(button.innerText);
-    calculator.updatePageDisplay();
-  });
-});
-
-operationButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    calculator.chooseOperation(button.innerText);
-    calculator.updatePageDisplay();
-  });
-});
-
-equalsButton.addEventListener("click", () => {
-  calculator.calc();
-  calculator.updatePageDisplay();
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        calculator.handleInput(button.innerText);
+        updatePageDisplay();
+    });
 });
 
 allClearButton.addEventListener("click", () => {
-  calculator.clear();
-  calculator.updatePageDisplay();
+    calculator.handleInput("a");
+    updatePageDisplay();
 });
 
 deleteButton.addEventListener("click", () => {
-  calculator.delete();
-  calculator.updatePageDisplay();
+    calculator.handleInput("Backspace");
+    updatePageDisplay();
 });
